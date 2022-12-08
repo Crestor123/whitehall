@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://Scripts/Resources/PlayerStats.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+name = "Test"
+health = 10
+mana = 10
+strength = 2
+dexterity = 2
+constitution = 2
+intelligence = 2
+wisdom = 2
+charisma = 2

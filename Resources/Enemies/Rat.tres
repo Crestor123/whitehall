@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://Scripts/Resources/Enemy.gd" type="Script" id=1]
+[ext_resource path="res://Resources/Abilities/Attack.tres" type="Resource" id=2]
+
+[resource]
+script = ExtResource( 1 )
+name = "Rat"
+health = 5
+mana = 1
+strength = 1
+dexterity = 1
+constitution = 1
+intelligence = 1
+wisdom = 1
+charisma = 1
+abilities = [ ExtResource( 2 ) ]
