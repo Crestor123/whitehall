@@ -6,6 +6,7 @@ class_name Battler
 export var data : String
 export(PackedScene) var abilityObject
 
+onready var targetList = get_parent()
 onready var healthBar = $HealthBar
 
 var isActive = false
@@ -59,19 +60,35 @@ func setActive():
 	print(self, "active")
 	#For party members, need to wait for the player's selection of move
 	#For enemies, need to select one of their moves
-	
-	var timer = Timer.new()
-	timer.connect("timeout", self, "turnTest")
-	timer.one_shot = true
-	add_child(timer)
-	timer.start()
+	if partyMember == false:
+		var timer = Timer.new()
+		timer.connect("timeout", self, "turnTest")
+		timer.one_shot = true
+		add_child(timer)
+		timer.start()
 	pass
 
 func turnTest():
 	emit_signal("turnFinished")
 
-func useAbility():
+func chooseTarget():
+	var target : Battler
+	for child in targetList:
+		if child != self:
+			target = child
+	return target
+	pass
+
+func useAbility(ability):
+	emit_signal("turnFinished")
 	pass
 	
-func takeDamage():
+func takeDamage(damage):
+	stats.health -= damage
+	healthBar.updateBar(100 * (stats.health / stats.maxhealth))
+	pass
+
+func die():
+	print(self, " dead")
+	queue_free()
 	pass
