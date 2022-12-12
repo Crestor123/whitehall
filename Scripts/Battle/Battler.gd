@@ -62,10 +62,13 @@ func setActive():
 	#For enemies, need to select one of their moves
 	if partyMember == false:
 		var timer = Timer.new()
-		timer.connect("timeout", self, "turnTest")
+		#timer.connect("timeout", self, "turnTest")
 		timer.one_shot = true
 		add_child(timer)
 		timer.start()
+		yield(timer, "timeout")
+		if abilities.get_child_count() == 1:
+			useAbility(abilities.get_child(0))
 	pass
 
 func turnTest():
@@ -73,13 +76,16 @@ func turnTest():
 
 func chooseTarget():
 	var target : Battler
-	for child in targetList:
+	for child in targetList.get_children():
 		if child != self:
 			target = child
 	return target
 	pass
 
 func useAbility(ability):
+	var damage = stats[ability.mainStat] * ability.multiplier + ability.baseDamage
+	print(damage)
+	chooseTarget().takeDamage(damage)
 	emit_signal("turnFinished")
 	pass
 	
