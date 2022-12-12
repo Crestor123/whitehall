@@ -7,6 +7,7 @@ export(PackedScene) var battlerScene
 onready var turnOrder = $TurnOrder
 onready var UI = $UILayer
 
+var partyList = []
 var enemyList = []
 
 func _ready():
@@ -22,6 +23,7 @@ func initialize(party, enemies):
 		newBattler.stats = member.stats
 		newBattler.partyMember = true
 		newBattler.initialize()
+		partyList.append(newBattler)
 		#newBattler.connect("turnFinished", self, "turnFinished")
 		
 	for enemy in enemies:
@@ -34,6 +36,7 @@ func initialize(party, enemies):
 		enemyList.append(newBattler)
 		
 	turnOrder.sortTurn()
+	UI.initialize(partyList, enemyList)
 	while(!enemyList.empty()):
 		yield(startTurn(), "completed")
 	pass

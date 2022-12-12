@@ -82,10 +82,13 @@ func chooseTarget():
 	return target
 	pass
 
-func useAbility(ability):
+func useAbility(ability, target = null):
 	var damage = stats[ability.mainStat] * ability.multiplier + ability.baseDamage
 	print(damage)
-	chooseTarget().takeDamage(damage)
+	if target == null:
+		chooseTarget().takeDamage(damage)
+	else:
+		target.takeDamage(damage)
 	emit_signal("turnFinished")
 	pass
 	
