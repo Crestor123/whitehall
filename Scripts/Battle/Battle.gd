@@ -23,6 +23,7 @@ func initialize(party, enemies):
 		newBattler.stats = member.stats
 		newBattler.partyMember = true
 		newBattler.initialize()
+		newBattler.connect("dead", self, "battlerDead")
 		partyList.append(newBattler)
 		#newBattler.connect("turnFinished", self, "turnFinished")
 		
@@ -32,6 +33,7 @@ func initialize(party, enemies):
 		newBattler.translation = Vector3(-5 * (turnOrder.get_child_count() - party.size()), 2, 10)
 		newBattler.data = enemy
 		newBattler.initialize()
+		newBattler.connect("dead", self, "battlerDead")
 		#newBattler.connect("turnFinished", self, "turnFinished")
 		enemyList.append(newBattler)
 		
@@ -55,6 +57,11 @@ func startTurn():
 		UI.hide()
 		yield(turnOrder.activeBattler, "turnFinished")
 		turnFinished()
+	pass
+
+func battlerDead(battler : Battler):
+	#Remove the battler from the turn order
+	turnOrder.removeTurn(battler)
 	pass
 
 func turnFinished():

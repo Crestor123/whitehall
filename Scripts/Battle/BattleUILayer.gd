@@ -41,8 +41,9 @@ func _input(event):
 
 func setTarget(battler : Battler):
 	target = battler
-	targetMarker.global_transform.origin = battler.global_transform.origin
-	targetMarker.translate(Vector3(0.05, 0.8, 0))
+	if battler != null:
+		targetMarker.global_transform.origin = battler.global_transform.origin
+		targetMarker.translate(Vector3(0.05, 0.8, 0))
 	pass
 
 func show(partyMember):

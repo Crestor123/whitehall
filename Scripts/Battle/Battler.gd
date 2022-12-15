@@ -13,6 +13,7 @@ var isActive = false
 var partyMember = false
 
 signal turnFinished
+signal dead
 
 #For party members, this is set to point to their ability node
 #For enemies, it points to this node's child
@@ -77,7 +78,7 @@ func turnTest():
 func chooseTarget():
 	var target : Battler
 	for child in targetList.get_children():
-		if child != self:
+		if child != self and child.partyMember == true:
 			target = child
 	return target
 	pass
@@ -94,10 +95,13 @@ func useAbility(ability, target = null):
 	
 func takeDamage(damage):
 	stats.health -= damage
+	if stats.health < 0:
+		die()
 	healthBar.updateBar(100 * (stats.health / stats.maxhealth))
 	pass
 
 func die():
 	print(self, " dead")
+	emit_signal("dead", self)
 	queue_free()
 	pass

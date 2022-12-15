@@ -2,12 +2,17 @@ extends Node
 
 onready var activeBattler : Battler
 
-func addTurn():
+func addTurn(battler : Battler):
 	#Adds a node to the turn order
 	pass
 	
-func removeTurn():
+func removeTurn(battler : Battler):
 	#Removes a node from the turn order
+	var currentBattler = activeBattler
+	remove_child(battler)
+	sortTurn()
+	var nextBattlerIndex = (currentBattler.get_index() + 1) % get_child_count()
+	activeBattler = get_child(nextBattlerIndex)
 	pass
 	
 func sortTurn():
