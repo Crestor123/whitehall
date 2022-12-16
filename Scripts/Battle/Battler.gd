@@ -31,6 +31,8 @@ var stats = {
 	"wisdom": 0,
 	"charisma": 0
 	}
+	
+var buffs = []
 
 func _ready():
 	if abilities == null:
@@ -95,9 +97,31 @@ func useAbility(ability, target = null):
 	
 func takeDamage(damage):
 	stats.health -= damage
+	if stats.health > stats.maxhealth:
+		stats.health = stats.maxhealth
 	if stats.health < 0:
 		die()
 	healthBar.updateBar(100 * (stats.health / stats.maxhealth))
+	pass
+
+func addBuff(stat : String, value : int, turns : int):
+	#Add a persistent effect to the battler's list of buffs
+	var buff = {"stat": stat, "value": value, "turns": turns}
+	if stat != "health":
+		stats[stat] += value
+	buffs.append(buff)
+	pass
+	
+func stepBuff():
+	#Checks each buff and evaluates the effects
+	for buff in buffs:
+		buff["turns"] -= 1
+		if buff["stat"] == "health":
+			takeDamage(-buff["value"])
+		if buff["turns"] <= 0:  #The buff has expired
+			if buff["stat"] != "heatlh":
+				stats[buff["stat"]] -= buff["value"]
+			buffs.erase(buff)
 	pass
 
 func die():
