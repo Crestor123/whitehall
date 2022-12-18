@@ -32,6 +32,29 @@ var stats = {
 	"charisma": 0
 	}
 	
+var resistances = {
+	"fire": 0,
+	"light": 0,
+	"heat": 0,
+	"electricity": 0,
+	"earth": 0,
+	"metal": 0,
+	"crystal": 0,
+	"wood": 0,
+	"air": 0,
+	"sound": 0,
+	"motion": 0,
+	"void": 0,
+	"water": 0,
+	"cold": 0,
+	"acid": 0,
+	"darkness": 0,
+	"mind": 0,
+	"soul": 0,
+	"flesh": 0,
+	"time": 0
+}
+	
 var buffs = []
 
 func _ready():
@@ -55,6 +78,8 @@ func initialize():
 		stats.intelligence = resource.intelligence
 		stats.wisdom = resource.wisdom
 		stats.charisma = resource.charisma
+		for stat in resource.resistances:
+			resistances[stat] = resource.resistances[stat]
 		
 	healthBar.updateBar(100 * (stats.health / stats.maxhealth))
 	pass
@@ -87,16 +112,21 @@ func chooseTarget():
 
 func useAbility(ability, target = null):
 	var damage = stats[ability.mainStat] * ability.multiplier + ability.baseDamage
-	print(damage)
 	if target == null:
-		chooseTarget().takeDamage(damage)
+		chooseTarget().takeDamage(damage, ability.type)
 	else:
-		target.takeDamage(damage)
+		target.takeDamage(damage, ability.type)
 	emit_signal("turnFinished")
 	pass
 	
-func takeDamage(damage):
-	stats.health -= damage
+#Positive values denote damage, and negative values are healing
+func takeDamage(damage, type):
+	var damageValue = 0
+	if damage > 0:
+		damageValue = damage - int(float(damage * (float(resistances[type]) / 100)))
+	else: damageValue = damage
+	print(damageValue)
+	stats.health -= damageValue
 	if stats.health > stats.maxhealth:
 		stats.health = stats.maxhealth
 	if stats.health < 0:
@@ -104,9 +134,9 @@ func takeDamage(damage):
 	healthBar.updateBar(100 * (stats.health / stats.maxhealth))
 	pass
 
-func addBuff(stat : String, value : int, turns : int):
+func addBuff(stat : String, value : int, type : String, turns : int):
 	#Add a persistent effect to the battler's list of buffs
-	var buff = {"stat": stat, "value": value, "turns": turns}
+	var buff = {"stat": stat, "value": value, "type": type, "turns": turns}
 	if stat != "health":
 		stats[stat] += value
 	buffs.append(buff)
@@ -117,7 +147,7 @@ func stepBuff():
 	for buff in buffs:
 		buff["turns"] -= 1
 		if buff["stat"] == "health":
-			takeDamage(-buff["value"])
+			takeDamage(-buff["value"], buff["type"])
 		if buff["turns"] <= 0:  #The buff has expired
 			if buff["stat"] != "heatlh":
 				stats[buff["stat"]] -= buff["value"]
