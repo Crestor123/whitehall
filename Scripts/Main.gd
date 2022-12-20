@@ -26,7 +26,7 @@ func start_combat():
 	var battlers = []
 	for child in partyMembers.get_children():
 		battlers.append(child)
-	var enemies = ["res://Resources/Enemies/Rat.tres", "res://Resources/Enemies/Rat.tres", "res://Resources/Enemies/Rat.tres"]
+	var enemies = ["res://Resources/Enemies/Rat.tres"]
 	battle.initialize(battlers, enemies)
 	anim.play_backwards("Fade")
 	yield(anim, "animation_finished")

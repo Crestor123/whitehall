@@ -97,6 +97,7 @@ func setActive():
 		yield(timer, "timeout")
 		if abilities.get_child_count() == 1:
 			useAbility(abilities.get_child(0))
+	stepBuff()
 	pass
 
 func turnTest():
@@ -112,18 +113,33 @@ func chooseTarget():
 
 func useAbility(ability, target = null):
 	var damage = stats[ability.mainStat] * ability.multiplier + ability.baseDamage
-	if target == null:
-		chooseTarget().takeDamage(damage, ability.type)
-	else:
-		target.takeDamage(damage, ability.type)
+	if ability.name == "Defend": target = self
+	if ability.type == "buff":
+		addBuff(ability.mainStat, damage, ability.element, ability.turns)
+		pass
+	if ability.type == "attack":
+		if target == null:
+			chooseTarget().takeDamage(damage, ability.element)
+		else:
+			target.takeDamage(damage, ability.element)
+	
+	if ability.additionalEffects.size() > 0:
+		for effect in ability.additionalEffects:
+			if effect == "resistances":
+				for i in ability.additionalEffects[effect]:
+					if i == "all":
+						for j in resistances:
+							addBuff(j, ability.additionalEffects[effect][i], ability.element, ability.turns)
+					else: addBuff(i, ability.additionalEffects[effect][i], ability.element, ability.turns)
+				
 	emit_signal("turnFinished")
 	pass
 	
 #Positive values denote damage, and negative values are healing
-func takeDamage(damage, type):
+func takeDamage(damage, element):
 	var damageValue = 0
 	if damage > 0:
-		damageValue = damage - int(float(damage * (float(resistances[type]) / 100)))
+		damageValue = damage - int(float(damage * (float(resistances[element]) / 100)))
 	else: damageValue = damage
 	print(damageValue)
 	stats.health -= damageValue
@@ -134,23 +150,32 @@ func takeDamage(damage, type):
 	healthBar.updateBar(100 * (stats.health / stats.maxhealth))
 	pass
 
-func addBuff(stat : String, value : int, type : String, turns : int):
+func addBuff(stat : String, value : int, element : String, turns : int):
 	#Add a persistent effect to the battler's list of buffs
-	var buff = {"stat": stat, "value": value, "type": type, "turns": turns}
-	if stat != "health":
+	var buff = {"stat": stat, "value": value, "element": element, "turns": turns}
+	if stats.has(stat) and stat != "health":
 		stats[stat] += value
+	if resistances.has(stat):
+		resistances[stat] += value
 	buffs.append(buff)
 	pass
 	
 func stepBuff():
-	#Checks each buff and evaluates the effects
-	for buff in buffs:
+	#Checks each buff and evaluates the effects 
+	for i in buffs.size():
+		var buff = buffs[i]
 		buff["turns"] -= 1
 		if buff["stat"] == "health":
 			takeDamage(-buff["value"], buff["type"])
 		if buff["turns"] <= 0:  #The buff has expired
-			if buff["stat"] != "heatlh":
+			if stats.has(buff["stat"]) and buff["stat"] != "heatlh":
 				stats[buff["stat"]] -= buff["value"]
+			if resistances.has(buff["stat"]):
+				resistances[buff["stat"]] -= buff["value"]
+	
+	var removedBuffs = buffs.duplicate()
+	for buff in removedBuffs:
+		if buff["turns"] <= 0:
 			buffs.erase(buff)
 	pass
 
