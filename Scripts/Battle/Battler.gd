@@ -56,6 +56,7 @@ var resistances = {
 }
 	
 var buffs = []
+var buffSources = []
 
 func _ready():
 	if abilities == null:
@@ -115,7 +116,7 @@ func useAbility(ability, target = null):
 	var damage = stats[ability.mainStat] * ability.multiplier + ability.baseDamage
 	if ability.name == "Defend": target = self
 	if ability.type == "buff":
-		addBuff(ability.mainStat, damage, ability.element, ability.turns)
+		addBuff(ability.attackName, ability.mainStat, damage, ability.element, ability.turns)
 		pass
 	if ability.type == "attack":
 		if target == null:
@@ -129,8 +130,10 @@ func useAbility(ability, target = null):
 				for i in ability.additionalEffects[effect]:
 					if i == "all":
 						for j in resistances:
-							addBuff(j, ability.additionalEffects[effect][i], ability.element, ability.turns)
-					else: addBuff(i, ability.additionalEffects[effect][i], ability.element, ability.turns)
+							addBuff(ability.attackName, j, ability.additionalEffects[effect][i], 
+								ability.element, ability.turns)
+					else: addBuff(ability.attackName, i, ability.additionalEffects[effect][i], 
+						ability.element, ability.turns)
 				
 	emit_signal("turnFinished")
 	pass
@@ -139,7 +142,7 @@ func useAbility(ability, target = null):
 func takeDamage(damage, element):
 	var damageValue = 0
 	if damage > 0:
-		damageValue = damage - int(float(damage * (float(resistances[element]) / 100)))
+		damageValue = damage - ceil(float(damage * (float(resistances[element]) / 100)))
 	else: damageValue = damage
 	print(damageValue)
 	stats.health -= damageValue
@@ -150,9 +153,17 @@ func takeDamage(damage, element):
 	healthBar.updateBar(100 * (stats.health / stats.maxhealth))
 	pass
 
-func addBuff(stat : String, value : int, element : String, turns : int):
+func addBuff(source: String, stat : String, value : int, element : String, turns : int):
 	#Add a persistent effect to the battler's list of buffs
-	var buff = {"stat": stat, "value": value, "element": element, "turns": turns}
+	var exists = false
+	for item in buffs:
+		if item["source"] == source and item["stat"] == stat and item["element"] == element:
+			item["turns"] == turns
+			exists = true
+	if exists == true: 
+		print("found buff")
+		return
+	var buff = {"source": source, "stat": stat, "value": value, "element": element, "turns": turns}
 	if stats.has(stat) and stat != "health":
 		stats[stat] += value
 	if resistances.has(stat):

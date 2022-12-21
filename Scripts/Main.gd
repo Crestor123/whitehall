@@ -7,6 +7,7 @@ onready var partyMembers = $PartyMembers
 onready var anim =$AnimationPlayer
 
 export var battleScene : PackedScene
+export var mapScene : PackedScene
 
 var previousScene
 
@@ -22,6 +23,7 @@ func start_combat():
 	currentScene.get_child(0).queue_free()
 	var battle = battleScene.instance()
 	currentScene.add_child(battle)
+	battle.connect("combatFinished", self, "end_combat")
 	#Pass the list of party members and enemies to the battle scene
 	var battlers = []
 	for child in partyMembers.get_children():
@@ -33,4 +35,11 @@ func start_combat():
 	pass
 	
 func end_combat():
+	anim.play("Fade")
+	yield(anim, "animation_finished")
+	currentScene.get_child(0).queue_free()
+	var map = mapScene.instance()
+	currentScene.add_child(map)
+	anim.play_backwards("Fade")
+	yield(anim, "animation_finished")
 	pass

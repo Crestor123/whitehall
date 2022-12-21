@@ -10,6 +10,8 @@ onready var UI = $UILayer
 var partyList = []
 var enemyList = []
 
+signal combatFinished
+
 func _ready():
 	pass
 
@@ -62,6 +64,17 @@ func startTurn():
 func battlerDead(battler : Battler):
 	#Remove the battler from the turn order
 	turnOrder.removeTurn(battler)
+	if battler.partyMember == true:
+		partyList.erase(battler)
+	else: enemyList.erase(battler)
+	
+	if enemyList.empty() == true:
+		#Won the battle, go back to previous scene
+		emit_signal("combatFinished")
+		pass
+	if partyList.empty() == true:
+		#Lost the battle
+		pass
 	pass
 
 func turnFinished():

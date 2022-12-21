@@ -15,6 +15,6 @@ turns = 2
 element = "earth"
 additionalEffects = {
 "resistances": {
-"all": 50
+"all": 25
 }
 }
