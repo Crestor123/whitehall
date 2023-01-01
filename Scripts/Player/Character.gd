@@ -27,3 +27,10 @@ func _physics_process(delta):
 	velocity.y -= fall_acceleration * delta
 	
 	velocity = move_and_slide(velocity, Vector3.UP)
+	
+	for index in range(get_slide_count()):
+		var collision = get_slide_collision(index)
+		if collision.collider.is_in_group("entities"):
+			print("collision")
+			collision.collider.on_collide()
+		

@@ -1,6 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scenes/Actors/Character.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Actors/Entity.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scripts/Battle/EnemyParties/RatDuo.tres" type="Resource" id=3]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 30, 1, 30 )
@@ -11,6 +13,7 @@ size = Vector3( 60, 2, 60 )
 [node name="Test" type="Spatial"]
 
 [node name="StaticBody" type="StaticBody" parent="."]
+collision_mask = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50841, 2.6129, -1.46906 )
@@ -33,3 +36,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 8.42109, 2 )
 transform = Transform( 1, 0, 0, 0, 0.729411, 0.684076, 0, -0.684076, 0.729411, 0, 11.8521, 11.7983 )
 
 [node name="Camera" type="Camera" parent="CameraPivot"]
+
+[node name="Entity" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.21229, 4.60054, 4.27536 )
+data = ExtResource( 3 )
