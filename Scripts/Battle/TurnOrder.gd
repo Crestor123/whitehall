@@ -11,8 +11,9 @@ func removeTurn(battler : Battler):
 	var currentBattler = activeBattler
 	remove_child(battler)
 	sortTurn()
-	var nextBattlerIndex = (currentBattler.get_index() + 1) % get_child_count()
-	activeBattler = get_child(nextBattlerIndex)
+	#var nextBattlerIndex = (currentBattler.get_index() + 1) % get_child_count()
+	#var nextBattlerIndex = currentBattler.get_index()
+	activeBattler = get_child(currentBattler.get_index())
 	pass
 	
 func sortTurn():

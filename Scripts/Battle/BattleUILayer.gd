@@ -29,6 +29,8 @@ static func sort(a : Battler, b : Battler):
 	return a.global_transform.origin > b.global_transform.origin
 
 func _input(event):
+	var previousIndex = targetIndex
+	
 	if event.is_action_pressed("ui_right"):
 		targetIndex = targetIndex - 1
 		if targetIndex < 0:
@@ -37,7 +39,8 @@ func _input(event):
 		targetIndex = targetIndex + 1
 		if targetIndex > enemyList.size() - 1:
 			targetIndex = 0
-	setTarget(enemyList[targetIndex])
+	if previousIndex != targetIndex:
+		setTarget(enemyList[targetIndex])
 
 func setTarget(battler : Battler):
 	target = battler
