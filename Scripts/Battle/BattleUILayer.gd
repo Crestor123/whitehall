@@ -51,6 +51,13 @@ func setTarget(battler : Battler):
 
 func show(partyMember):
 	set_process(true)
+	print(target)
+	#Error checking to make sure that the target is initialized properly
+	if !is_instance_valid(target):
+		for enemy in enemyList:
+			if is_instance_valid(enemy):
+				setTarget(enemy)
+				break
 	for child in partyMember.abilities.get_children():
 		var newButton = abilityButton.instance()
 		abilityContainer.add_child(newButton)
