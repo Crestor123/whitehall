@@ -2,9 +2,9 @@ extends Node
 
 #Contains the party member's stats, hp, level, etc.
 #Initially set by accessing a resource
-export var statResource : Resource
+@export var statResource : Resource
 
-onready var abilities = $Abilities
+@onready var abilities = $Abilities
 
 var stats = {
 	"maxhealth": 0,

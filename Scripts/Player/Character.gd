@@ -1,10 +1,7 @@
-extends KinematicBody
+extends CharacterBody3D
 
-export var speed = 14
-export var fall_acceleration = 75
-
-var velocity = Vector3.ZERO
-
+@export var speed = 14
+@export var fall_acceleration = 75
 
 func _physics_process(delta):
 	
@@ -26,11 +23,14 @@ func _physics_process(delta):
 	velocity.z = direction.z * speed
 	velocity.y -= fall_acceleration * delta
 	
-	velocity = move_and_slide(velocity, Vector3.UP)
+	set_velocity(velocity)
+	set_up_direction(Vector3.UP)
+	move_and_slide()
 	
-	for index in range(get_slide_count()):
+	for index in range(get_slide_collision_count()):
 		var collision = get_slide_collision(index)
-		if collision.collider.is_in_group("entities"):
+		var collider = collision.get_collider()
+		if collider.is_in_group("entities"):
 			print("collision")
-			collision.collider.on_collide()
+			collider.on_collide()
 		

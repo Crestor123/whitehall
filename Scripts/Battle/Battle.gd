@@ -1,11 +1,11 @@
-extends Spatial
+extends Node3D
 
 #Controls flow of battle
 #Handles evaluating ability uses and updating UI
-export(PackedScene) var battlerScene
+@export var battlerScene: PackedScene
 
-onready var turnOrder = $TurnOrder
-onready var UI = $UILayer
+@onready var turnOrder = $TurnOrder
+@onready var UI = $UILayer
 
 var partyList = []
 var enemyList = []
@@ -18,46 +18,47 @@ func _ready():
 func initialize(party, enemies):
 	#Populate the turn order with the list of battlers
 	for member in party:
-		var newBattler = battlerScene.instance()
+		var newBattler = battlerScene.instantiate()
 		turnOrder.add_child(newBattler)
-		newBattler.translation = Vector3(5 * turnOrder.get_child_count(), 2, 10)
+		newBattler.position = Vector3(5 * turnOrder.get_child_count(), 2, 10)
 		newBattler.abilities = member.abilities
 		newBattler.stats = member.stats
 		newBattler.partyMember = true
 		newBattler.initialize()
-		newBattler.connect("dead", self, "battlerDead")
+		newBattler.connect("dead",Callable(self,"battlerDead"))
 		partyList.append(newBattler)
-		#newBattler.connect("turnFinished", self, "turnFinished")
+		#newBattler.connect("turnFinished",Callable(self,"turnFinished"))
 		
 	for enemy in enemies:
-		var newBattler = battlerScene.instance()
+		var newBattler = battlerScene.instantiate()
 		turnOrder.add_child(newBattler)
-		newBattler.translation = Vector3(-5 * (turnOrder.get_child_count() - party.size()), 2, 10)
+		newBattler.position = Vector3(-5 * (turnOrder.get_child_count() - party.size()), 2, 10)
 		newBattler.data = enemy
 		newBattler.initialize()
-		newBattler.connect("dead", self, "battlerDead")
-		#newBattler.connect("turnFinished", self, "turnFinished")
+		newBattler.connect("dead",Callable(self,"battlerDead"))
+		#newBattler.connect("turnFinished",Callable(self,"turnFinished"))
 		enemyList.append(newBattler)
 		
 	turnOrder.sortTurn()
 	UI.initialize(partyList, enemyList)
-	while(!enemyList.empty()):
-		yield(startTurn(), "completed")
+	while(!enemyList.is_empty()):
+		await startTurn()
+		#await startTurn().completed
 	pass
 
 func startTurn():
 	turnOrder.activeBattler.setActive()
 	if turnOrder.activeBattler.partyMember == true:
-		UI.show(turnOrder.activeBattler)
-		UI.connect("input", turnOrder.activeBattler, "useAbility")
-		yield(turnOrder.activeBattler, "turnFinished")
-		UI.disconnect("input", turnOrder.activeBattler, "useAbility")
-		#yield(UI, "input")
-		UI.hide()
+		UI.showUI(turnOrder.activeBattler)
+		UI.connect("input",Callable(turnOrder.activeBattler,"useAbility"))
+		await turnOrder.activeBattler.turnFinished
+		UI.disconnect("input",Callable(turnOrder.activeBattler,"useAbility"))
+		#await UI.input
+		UI.hideUI()
 		turnFinished()
 	else:
-		UI.hide()
-		yield(turnOrder.activeBattler, "turnFinished")
+		UI.hideUI()
+		await turnOrder.activeBattler.turnFinished
 		turnFinished()
 	pass
 
@@ -68,18 +69,18 @@ func battlerDead(battler : Battler):
 		partyList.erase(battler)
 	else: enemyList.erase(battler)
 	
-	if enemyList.empty() == true:
+	if enemyList.is_empty() == true:
 		#Won the battle, go back to previous scene
 		emit_signal("combatFinished")
 		pass
-	if partyList.empty() == true:
+	if partyList.is_empty() == true:
 		#Lost the battle
 		pass
 	pass
 
 func turnFinished():
 	#Called when the current battler has finished its turn
-	#print("here")
+	print("Turn Finished")
 	turnOrder.nextBattler()
 	#startTurn()
 	pass

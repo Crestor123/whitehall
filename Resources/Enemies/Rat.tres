@@ -1,21 +1,21 @@
-[gd_resource type="Resource" load_steps=3 format=2]
+[gd_resource type="Resource" script_class="Enemy" load_steps=3 format=3 uid="uid://cs7qdgvyd3w7a"]
 
-[ext_resource path="res://Scripts/Resources/Enemy.gd" type="Script" id=1]
-[ext_resource path="res://Resources/Abilities/Attack.tres" type="Resource" id=2]
+[ext_resource type="Script" path="res://Scripts/Resources/Enemy.gd" id="1"]
+[ext_resource type="Resource" path="res://Resources/Abilities/Attack.tres" id="2"]
 
 [resource]
-script = ExtResource( 1 )
+script = ExtResource("1")
 name = "Rat"
 type = "earth"
 health = 5
 mana = 1
-strength = 1
+strength = 0
 dexterity = 1
 constitution = 1
 intelligence = 1
 wisdom = 1
 charisma = 1
-abilities = [ ExtResource( 2 ) ]
+abilities = Array[Resource]([ExtResource("2")])
 resistances = {
 "acid": 0,
 "air": 0,

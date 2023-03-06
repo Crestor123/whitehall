@@ -3,24 +3,24 @@ extends Resource
 #Contains a given enemy's stats and abilities
 class_name Enemy
 
-export var name : String
-export(String, "fire", "light", "heat", "electricity", "earth", "metal", 
+@export var name : String
+@export_enum ("fire", "light", "heat", "electricity", "earth", "metal", 
 	"crystal", "wood", "air", "sound", "motion", "void", "water", "cold",
 	"acid", "darkness", "mind", "soul", "flesh", "time") var type
 
-export var health : int
-export var mana : int
-export var strength : int
-export var dexterity : int
-export var constitution : int
-export var intelligence : int
-export var wisdom : int
-export var charisma : int
+@export var health : int
+@export var mana : int
+@export var strength : int
+@export var dexterity : int
+@export var constitution : int
+@export var intelligence : int
+@export var wisdom : int
+@export var charisma : int
 
-export(Array, Resource) var abilities
+@export var abilities : Array[Resource]
 
 #The amount of damage of a given type that is ignored, as a percentage
-export var resistances = {
+@export var resistances = {
 	"fire": 0,
 	"light": 0,
 	"heat": 0,

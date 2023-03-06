@@ -1,13 +1,13 @@
-extends Spatial
+extends Node3D
 
 class_name Battler
 
 #Contains the data used by a particular battler
-export var data : String
-export(PackedScene) var abilityObject
+@export var data : String
+@export var abilityObject: PackedScene
 
-onready var targetList = get_parent()
-onready var healthBar = $HealthBar
+@onready var targetList = get_parent()
+@onready var healthBar = $HealthBar
 
 var isActive = false
 var partyMember = false
@@ -66,7 +66,7 @@ func initialize():
 	if data:
 		resource = load(data)
 		for ability in resource.abilities:
-			var newAbility = abilityObject.instance()
+			var newAbility = abilityObject.instantiate()
 			newAbility.data = ability
 			newAbility.initialize()
 			abilities.add_child(newAbility)
@@ -87,15 +87,20 @@ func initialize():
 
 func setActive():
 	print(self, "active")
+	if stats.health <= 0:
+		emit_signal("turnFinished")
+	isActive = true
+	if stats.health <= 0:
+		return
 	#For party members, need to wait for the player's selection of move
 	#For enemies, need to select one of their moves
 	if partyMember == false:
 		var timer = Timer.new()
-		#timer.connect("timeout", self, "turnTest")
+		#timer.connect("timeout",Callable(self,"turnTest"))
 		timer.one_shot = true
 		add_child(timer)
 		timer.start()
-		yield(timer, "timeout")
+		await timer.timeout
 		if abilities.get_child_count() == 1:
 			useAbility(abilities.get_child(0))
 	stepBuff()
@@ -136,10 +141,13 @@ func useAbility(ability, target = null):
 						ability.element, ability.turns)
 				
 	emit_signal("turnFinished")
+	isActive = false
 	pass
 	
 #Positive values denote damage, and negative values are healing
 func takeDamage(damage, element):
+	if partyMember == true:
+		print("Player taking ", damage, "damage")
 	var damageValue = 0
 	if damage > 0:
 		damageValue = damage - ceil(float(damage * (float(resistances[element]) / 100)))
@@ -193,5 +201,10 @@ func stepBuff():
 func die():
 	print(self, " dead")
 	emit_signal("dead", self)
+	if isActive == true:
+		#emit_signal("turnFinished")
+		isActive = false
+	await(healthBar.updateBar(0))
+	#get_parent().remove_child(self)
 	queue_free()
 	pass

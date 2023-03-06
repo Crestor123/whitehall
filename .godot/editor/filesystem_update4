@@ -1,0 +1,11 @@
+res://default_env.tres
+res://Scenes/Battle.tscn
+res://Scripts/Battle/Battler.gd
+res://Scenes/Main.tscn
+res://Scenes/Test.tscn
+res://Scenes/Actors/Entity.tscn
+res://Scenes/Objects/HealthBar.tscn
+res://Scenes/Actors/Battler.tscn
+res://Scripts/Objects/HealthBar.gd
+res://Scripts/Battle/TurnOrder.gd
+res://Scripts/Battle/BattleUILayer.gd

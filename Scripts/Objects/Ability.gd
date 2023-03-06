@@ -2,7 +2,7 @@ extends Node
 
 #Contains the data for a given ability
 
-export(Resource) var data = null
+@export var data: Resource = null
 
 var attackName : String
 var description : String

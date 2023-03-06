@@ -2,7 +2,7 @@ extends Resource
 
 class_name EntityData
 
-export(String, "battle", "npc", "interactable") var entityType
+@export_enum("battle", "npc", "interactable") var entityType
 
-export var collide : bool
-export(Array, String) var enemyParty
+@export var collide : bool
+@export var enemyParty : Array[String]

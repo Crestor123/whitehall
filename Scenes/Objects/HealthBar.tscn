@@ -1,35 +1,37 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://cx3qbr7phksxn"]
 
-[ext_resource path="res://Sprites/HealthBarProgress.png" type="Texture" id=1]
-[ext_resource path="res://Sprites/HealthBarOver.png" type="Texture" id=2]
-[ext_resource path="res://Sprites/HealthBarUnder.png" type="Texture" id=3]
-[ext_resource path="res://Scripts/Objects/HealthBar.gd" type="Script" id=4]
+[ext_resource type="Texture2D" uid="uid://1n4ep1w5xywd" path="res://Sprites/HealthBarProgress.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://civnqm5yx5qie" path="res://Sprites/HealthBarOver.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dal1evoy2ehgm" path="res://Sprites/HealthBarUnder.png" id="3"]
+[ext_resource type="Script" path="res://Scripts/Objects/HealthBar.gd" id="4"]
 
 [node name="HealthBar3D" type="Sprite3D"]
-transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0 )
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 billboard = 1
-texture = ExtResource( 2 )
-script = ExtResource( 4 )
+texture = ExtResource("2")
+script = ExtResource("4")
 
-[node name="Viewport" type="Viewport" parent="."]
-size = Vector2( 256, 16 )
+[node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true
 handle_input_locally = false
-usage = 0
-render_target_v_flip = true
 gui_disable_input = true
+size = Vector2i(256, 16)
 
-[node name="HealthBar" type="TextureProgress" parent="Viewport"]
+[node name="HealthBar" type="TextureProgressBar" parent="SubViewport"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -72.0
-margin_bottom = -192.0
-rect_scale = Vector2( 2, 2 )
-texture_under = ExtResource( 3 )
-texture_over = ExtResource( 2 )
-texture_progress = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_right = -72.0
+offset_bottom = -192.0
+scale = Vector2(2, 2)
+texture_under = ExtResource("3")
+texture_over = ExtResource("2")
+texture_progress = ExtResource("1")
 
 [node name="Tween" type="Tween" parent="."]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+editor_description = ""
+script = null

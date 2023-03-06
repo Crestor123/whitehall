@@ -1,8 +1,8 @@
 [gd_scene format=2]
 
 [node name="Button" type="Button"]
-margin_right = 256.0
-margin_bottom = 20.0
+offset_right = 256.0
+offset_bottom = 20.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Test"
