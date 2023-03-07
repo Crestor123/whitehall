@@ -18,7 +18,7 @@ script = ExtResource("1")
 battlerScene = ExtResource("3")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.986095, 0.166184, 0, -0.166184, 0.986095, 0, 4.50785, 30.2824)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 30)
 
 [node name="TurnOrder" type="Node" parent="."]
 script = ExtResource("2")

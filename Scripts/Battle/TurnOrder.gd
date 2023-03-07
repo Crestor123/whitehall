@@ -22,9 +22,9 @@ func sortTurn():
 	#Sorts the nodes in the turn order by dexterity
 	var battlers = get_children()
 	battlers.sort_custom(Callable(self,'sort'))
-	for battler in battlers:
+	#for battler in battlers:
 		#battler.raise()
-		self.move_child(battler, 0)
+		#self.move_child(battler, 0)
 	activeBattler = get_child(0)
 	pass
 	
