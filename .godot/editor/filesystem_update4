@@ -1,10 +1,3 @@
 res://default_env.tres
-res://Scenes/Main.tscn
-res://Scripts/Battle/TurnOrder.gd
-res://Scenes/Test.tscn
-res://Scenes/Actors/Entity.tscn
-res://Scenes/Battle.tscn
-res://Scenes/Objects/HealthBar.tscn
-res://Scenes/Actors/Battler.tscn
-res://Scenes/Menus/SpellMenu.tscn
 res://Scenes/Menus/SpellComponent.tscn
+res://Scenes/Menus/SpellMenu.tscn

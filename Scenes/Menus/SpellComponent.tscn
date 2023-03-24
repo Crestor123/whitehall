@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://ccaltnpcq1ljl"]
+[gd_scene load_steps=3 format=3 uid="uid://ccaltnpcq1ljl"]
 
-[ext_resource type="Texture2D" uid="uid://dbb00rxfkyij4" path="res://Sprites/Fire.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://8ti8obyxhxh3" path="res://Sprites/EmptySlot.png" id="1_ei60b"]
+[ext_resource type="Script" path="res://Scripts/Menus/SpellIcon.gd" id="2_kvmse"]
 
 [node name="SpellComponent" type="Control"]
 custom_minimum_size = Vector2(64, 64)
@@ -8,13 +9,19 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1024.0
-offset_bottom = -600.0
+offset_right = -960.0
+offset_bottom = -536.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
 
 [node name="Texture2D" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("1")
+layout_mode = 2
+offset_right = 64.0
+offset_bottom = 64.0
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+texture = ExtResource("1_ei60b")
 expand_mode = 1
+script = ExtResource("2_kvmse")

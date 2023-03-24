@@ -6,6 +6,7 @@ class_name Ability
 @export var description : String
 
 @export var type : String
+@export var target : String
 
 @export var mainStat : String
 @export var cost : int = 0
