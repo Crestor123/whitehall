@@ -1,10 +1,12 @@
-[gd_resource type="Resource" load_steps=2 format=2]
+[gd_resource type="Resource" script_class="PlayerStats" load_steps=3 format=3 uid="uid://e520o1ckb5g8"]
 
-[ext_resource path="res://Scripts/Resources/PlayerStats.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://Scripts/Resources/PlayerStats.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://n4dddq25qv34" path="res://icon.png" id="2_rwh7q"]
 
 [resource]
-script = ExtResource( 1 )
+script = ExtResource("1")
 name = "Test"
+sprite = ExtResource("2_rwh7q")
 health = 20
 mana = 10
 strength = 2

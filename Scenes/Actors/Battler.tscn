@@ -4,11 +4,14 @@
 [ext_resource type="PackedScene" path="res://Scenes/Objects/Ability.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://cx3qbr7phksxn" path="res://Scenes/Objects/HealthBar.tscn" id="3"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5mn63"]
-albedo_color = Color(1, 0, 0.0470588, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_murqx"]
+resource_local_to_scene = true
+albedo_color = Color(0.917647, 0, 0.133333, 1)
+billboard_mode = 1
 
-[sub_resource type="QuadMesh" id="1"]
-material = SubResource("StandardMaterial3D_5mn63")
+[sub_resource type="QuadMesh" id="QuadMesh_6qoxt"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_murqx")
 size = Vector2(2, 2)
 
 [sub_resource type="BoxShape3D" id="3"]
@@ -22,7 +25,7 @@ abilityObject = ExtResource("2")
 [node name="Pivot" type="Node3D" parent="CharacterBody3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/Pivot"]
-mesh = SubResource("1")
+mesh = SubResource("QuadMesh_6qoxt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 shape = SubResource("3")
@@ -30,4 +33,4 @@ shape = SubResource("3")
 [node name="Abilities" type="Node" parent="."]
 
 [node name="HealthBar" parent="." instance=ExtResource("3")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2.33319, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0)

@@ -23,6 +23,8 @@ func initialize(party, enemies):
 		newBattler.position = Vector3(5 * turnOrder.get_child_count(), 2, 10)
 		newBattler.abilities = member.abilities
 		newBattler.stats = member.stats
+		newBattler.battlerName = member.characterName
+		newBattler.set_sprite(member.sprite)
 		newBattler.partyMember = true
 		newBattler.initialize()
 		newBattler.connect("dead",Callable(self,"battlerDead"))

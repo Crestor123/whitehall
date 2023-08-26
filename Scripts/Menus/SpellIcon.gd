@@ -9,7 +9,7 @@ func _get_drag_data(at_position):
 
 	var preview = Control.new()
 	preview.add_child(drag_texture)
-	print(-0.5 * drag_texture.size)
+	#print(-0.5 * drag_texture.size)
 	drag_texture.position = -0.5 * drag_texture.size
 
 	set_drag_preview(preview)

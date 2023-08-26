@@ -6,8 +6,12 @@ class_name Battler
 @export var data : String
 @export var abilityObject: PackedScene
 
+@export var sprite : Texture2D
+@export var battlerName : String
+
 @onready var targetList = get_parent()
 @onready var healthBar = $HealthBar
+@onready var mesh = $CharacterBody3D/Pivot/MeshInstance3D
 
 var isActive = false
 var partyMember = false
@@ -65,6 +69,7 @@ func _ready():
 func initialize():
 	if data:
 		resource = load(data)
+		battlerName = resource.name
 		for ability in resource.abilities:
 			var newAbility = abilityObject.instantiate()
 			newAbility.data = ability
@@ -79,11 +84,17 @@ func initialize():
 		stats.intelligence = resource.intelligence
 		stats.wisdom = resource.wisdom
 		stats.charisma = resource.charisma
+		if resource.sprite != null:
+			set_sprite(resource.sprite)
 		for stat in resource.resistances:
 			resistances[stat] = resource.resistances[stat]
 		
 	healthBar.updateBar(100 * (stats.health / stats.maxhealth))
 	pass
+
+func set_sprite(newSprite : Texture2D):
+	mesh.mesh.material.albedo_color = Color.WHITE
+	mesh.mesh.material.albedo_texture = newSprite
 
 func setActive():
 	print(self, "active")

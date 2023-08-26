@@ -4,6 +4,9 @@ extends Resource
 class_name Enemy
 
 @export var name : String
+
+@export var sprite : Texture2D
+
 @export_enum ("fire", "light", "heat", "electricity", "earth", "metal", 
 	"crystal", "wood", "air", "sound", "motion", "void", "water", "cold",
 	"acid", "darkness", "mind", "soul", "flesh", "time") var type

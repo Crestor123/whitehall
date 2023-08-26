@@ -6,6 +6,10 @@ extends Node
 
 @onready var abilities = $Abilities
 
+var characterName : String = ""
+
+var sprite : Texture2D = null
+
 var stats = {
 	"maxhealth": 0,
 	"health": 0, 
@@ -47,6 +51,8 @@ func _ready():
 
 func setStats():
 	#Set the party member's stats using the resource
+	characterName = statResource.name
+	sprite = statResource.sprite
 	stats.maxhealth = statResource.health
 	stats.health = statResource.health
 	stats.mana = statResource.mana

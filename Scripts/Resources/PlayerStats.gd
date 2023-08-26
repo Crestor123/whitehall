@@ -4,6 +4,8 @@ class_name PlayerStats
 
 @export var name : String
 
+@export var sprite : Texture2D
+
 @export var health : int
 @export var mana : int
 @export var strength : int
