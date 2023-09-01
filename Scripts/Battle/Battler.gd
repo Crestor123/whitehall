@@ -1,20 +1,26 @@
-extends Node3D
+extends CharacterBody3D
 
 class_name Battler
 
 #Contains the data used by a particular battler
 @export var data : String
-@export var abilityObject: PackedScene
+@export var abilityObject : PackedScene
+@export var zoneObject : PackedScene
+@export var speed = 14
 
 @export var sprite : Texture2D
 @export var battlerName : String
 
 @onready var targetList = get_parent()
+@onready var movementNode = get_parent().get_parent().get_node("MovementZone")
 @onready var healthBar = $HealthBar
-@onready var mesh = $CharacterBody3D/Pivot/MeshInstance3D
+@onready var mesh = $Pivot/MeshInstance3D
 
 var isActive = false
 var partyMember = false
+var movePosition : Vector3
+var moveRange : float = 0
+var attackRange : float = 0
 
 signal turnFinished
 signal dead
@@ -66,6 +72,51 @@ func _ready():
 	if abilities == null:
 		abilities = $Abilities
 
+func _physics_process(delta):
+	if isActive == true && partyMember == true:
+		var direction = Vector3.ZERO
+	
+		if Input.is_action_pressed("move_right"):
+			direction.x += 1
+		if Input.is_action_pressed("move_left"):
+			direction.x -= 1
+		if Input.is_action_pressed("move_down"):
+			direction.z += 1
+		if Input.is_action_pressed("move_up"):
+			direction.z -= 1
+		
+		if direction != Vector3.ZERO:
+			direction = direction.normalized()
+	
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
+		#velocity.y -= fall_acceleration * delta
+	
+		#Check if the movment will put the battler outside of its movement radius
+		var newPosition = position + Vector3(velocity.x * delta, 0, 0)
+		var normal = -movePosition.direction_to(newPosition).normalized()
+		if newPosition.distance_to(movePosition) >= moveRange:
+			velocity += normal * (speed / 2)
+			velocity.x = 0
+		newPosition = position + Vector3(0, 0, velocity.z * delta)
+		normal = -movePosition.direction_to(newPosition).normalized()
+		if newPosition.distance_to(movePosition) >= moveRange:
+			velocity += normal * (speed / 2)
+			velocity.z = 0
+	
+		set_velocity(velocity)
+		set_up_direction(Vector3.UP)
+		move_and_slide()
+	
+	for index in range(get_slide_collision_count()):
+		var collision = get_slide_collision(index)
+		var collider = collision.get_collider()
+		if collider.is_in_group("entities"):
+			print("collision")
+			collider.on_collide()
+	
+	pass
+
 func initialize():
 	if data:
 		resource = load(data)
@@ -75,6 +126,7 @@ func initialize():
 			newAbility.data = ability
 			newAbility.initialize()
 			abilities.add_child(newAbility)
+		
 		stats.maxhealth = resource.health
 		stats.health = resource.health
 		stats.mana = resource.mana
@@ -84,10 +136,17 @@ func initialize():
 		stats.intelligence = resource.intelligence
 		stats.wisdom = resource.wisdom
 		stats.charisma = resource.charisma
+		
 		if resource.sprite != null:
 			set_sprite(resource.sprite)
 		for stat in resource.resistances:
 			resistances[stat] = resource.resistances[stat]
+		
+	moveRange = stats.dexterity * 3
+		#Temporary - set attack range
+	attackRange = 2
+		
+
 		
 	healthBar.updateBar(100 * (stats.health / stats.maxhealth))
 	pass
@@ -103,6 +162,12 @@ func setActive():
 	isActive = true
 	if stats.health <= 0:
 		return
+	#Create a movement zone that the battler can move within
+	#Create an attack zone that shows wher the battler can reach
+	print(moveRange)
+	createZone(moveRange)
+	createZone(moveRange + attackRange, Color.RED)
+	movePosition = position
 	#For party members, need to wait for the player's selection of move
 	#For enemies, need to select one of their moves
 	if partyMember == false:
@@ -114,11 +179,25 @@ func setActive():
 		await timer.timeout
 		if abilities.get_child_count() == 1:
 			useAbility(abilities.get_child(0))
+	if partyMember == true:
+		await turnFinished
 	stepBuff()
+	movementNode.get_child(0).queue_free()
+	movementNode.get_child(0).queue_free()
 	pass
 
 func turnTest():
 	emit_signal("turnFinished")
+
+func createZone(radius, color = Color.BLUE):
+	#Create a new node to hold the movement zone and ring
+	var newZone = zoneObject.instantiate()
+	movementNode.add_child(newZone)
+	newZone.transform = self.transform
+	newZone.position.y -= 1
+	#Set the zone's radius to be proportional to the battler's dexterity
+	newZone.initialize(radius, color)
+	pass
 
 func chooseTarget():
 	var target : Battler
@@ -129,6 +208,8 @@ func chooseTarget():
 	pass
 
 func useAbility(ability, target = null):
+	set_velocity(Vector3.ZERO)
+	
 	var damage = stats[ability.mainStat] * ability.multiplier + ability.baseDamage
 	if ability.name == "Defend": target = self
 	if ability.type == "buff":

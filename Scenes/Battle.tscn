@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/Battle/TurnOrder.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://dtx36qpquw6tw" path="res://Scenes/Actors/Battler.tscn" id="3"]
 [ext_resource type="Script" path="res://Scripts/Battle/BattleUILayer.gd" id="4"]
-[ext_resource type="PackedScene" path="res://Scenes/Objects/AbilityButton.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://cyi0f72np8byw" path="res://Scenes/Objects/AbilityButton.tscn" id="5"]
 [ext_resource type="Texture2D" uid="uid://djqjl7m0j70gf" path="res://Sprites/CursorSingle.png" id="6"]
 
 [sub_resource type="BoxShape3D" id="1"]
@@ -85,3 +85,5 @@ texture = ExtResource("6")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.557528, 0.830158, 6.87257e-08, -0.363188, -0.243914, 0.899222, 0.746496, 0.501342, 0.437492, 0, 27.9737, 22.1812)
+
+[node name="MovementZone" type="Node3D" parent="."]

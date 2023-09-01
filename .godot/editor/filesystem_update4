@@ -1,5 +1,6 @@
 res://default_env.tres
 res://Scenes/Main.tscn
+res://Resources/PartyMembers/Test.tres
 res://Scenes/Test.tscn
 res://Scenes/Actors/Entity.tscn
 res://Scenes/Battle.tscn
@@ -8,10 +9,5 @@ res://Scenes/Actors/Battler.tscn
 res://Scenes/Menus/SpellMenu.tscn
 res://Scenes/Menus/SpellComponent.tscn
 res://Scenes/SceneChanger.tscn
-res://Resources/PartyMembers/Test.tres
-res://Scripts/Battle/Battle.gd
-res://Scripts/Resources/PlayerStats.gd
+res://Scenes/Objects/Zone3D.tscn
 res://Scripts/Battle/Battler.gd
-res://Scripts/Resources/Enemy.gd
-res://Scripts/Player/PlayerData.gd
-res://Scenes/Actors/PlayerData.tscn

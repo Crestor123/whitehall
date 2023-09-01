@@ -17,6 +17,8 @@ func _ready():
 
 func initialize(party, enemies):
 	#Populate the turn order with the list of battlers
+	
+	#Set up a new battler for each party member
 	for member in party:
 		var newBattler = battlerScene.instantiate()
 		turnOrder.add_child(newBattler)
@@ -30,7 +32,8 @@ func initialize(party, enemies):
 		newBattler.connect("dead",Callable(self,"battlerDead"))
 		partyList.append(newBattler)
 		#newBattler.connect("turnFinished",Callable(self,"turnFinished"))
-		
+	
+	#Set up a new battler for each enemy in the encounter
 	for enemy in enemies:
 		var newBattler = battlerScene.instantiate()
 		turnOrder.add_child(newBattler)
@@ -49,7 +52,10 @@ func initialize(party, enemies):
 	pass
 
 func startTurn():
+	#Sets the current battler to be active, and waits for the battler to finish the turn
 	turnOrder.activeBattler.setActive()
+	
+	#If the battler is a party member, set up the UI for that battler
 	if turnOrder.activeBattler.partyMember == true:
 		UI.showUI(turnOrder.activeBattler)
 		UI.connect("input",Callable(turnOrder.activeBattler,"useAbility"))

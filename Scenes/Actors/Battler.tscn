@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dtx36qpquw6tw"]
+[gd_scene load_steps=8 format=3 uid="uid://dtx36qpquw6tw"]
 
 [ext_resource type="Script" path="res://Scripts/Battle/Battler.gd" id="1"]
-[ext_resource type="PackedScene" path="res://Scenes/Objects/Ability.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://ckl2wxentndai" path="res://Scenes/Objects/Ability.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://cx3qbr7phksxn" path="res://Scenes/Objects/HealthBar.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://deo82ee37b383" path="res://Scenes/Objects/Zone3D.tscn" id="3_1dsw4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_murqx"]
 resource_local_to_scene = true
@@ -14,21 +15,22 @@ resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_murqx")
 size = Vector2(2, 2)
 
-[sub_resource type="BoxShape3D" id="3"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_p5hon"]
+radius = 1.0
 
-[node name="Battler" type="Node3D"]
+[node name="CharacterBody3D" type="CharacterBody3D"]
 script = ExtResource("1")
 abilityObject = ExtResource("2")
+zoneObject = ExtResource("3_1dsw4")
+speed = 10
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+[node name="Pivot" type="Node3D" parent="."]
 
-[node name="Pivot" type="Node3D" parent="CharacterBody3D"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/Pivot"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pivot"]
 mesh = SubResource("QuadMesh_6qoxt")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
-shape = SubResource("3")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_p5hon")
 
 [node name="Abilities" type="Node" parent="."]
 

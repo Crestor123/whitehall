@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://deo82ee37b383"]
+
+[ext_resource type="Script" path="res://Scripts/Objects/Zone3D.gd" id="1_64sk5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ga3pf"]
+resource_local_to_scene = true
+transparency = 1
+albedo_color = Color(0, 0.117647, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pm4ga"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_ga3pf")
+height = 0.1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_v6wx4"]
+resource_local_to_scene = true
+height = 0.1
+
+[node name="Zone3D" type="Area3D"]
+collision_layer = 0
+script = ExtResource("1_64sk5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_pm4ga")
+skeleton = NodePath("../CollisionShape3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_v6wx4")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAbilities.gd" id="1"]
 [ext_resource type="Script" path="res://Scripts/Player/PlayerData.gd" id="2"]
-[ext_resource type="PackedScene" path="res://Scenes/Objects/Ability.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://ckl2wxentndai" path="res://Scenes/Objects/Ability.tscn" id="3"]
 [ext_resource type="Resource" uid="uid://8h85so5ap7av" path="res://Resources/Abilities/Attack.tres" id="4"]
 [ext_resource type="Resource" uid="uid://dnsoo51m7n5x4" path="res://Resources/Abilities/Defend.tres" id="5"]
 

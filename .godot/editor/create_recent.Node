@@ -1,3 +1,9 @@
+Node3D
+MeshInstance3D
+CollisionShape3D
+Area3D
+ShapeCast3D
+GridMap
 Control
 PanelContainer
 DirectionalLight3D

@@ -12,6 +12,7 @@ var element : String
 var cost : int
 var baseDamage : int
 var multiplier : float
+var range : float
 var turns : int = 0
 
 var additionalEffects : Dictionary
@@ -26,6 +27,7 @@ func initialize():
 	cost = data.cost
 	baseDamage = data.baseDamage
 	multiplier = data.multiplier
+	range = data.range
 	turns = data.turns
 	additionalEffects = data.additionalEffects
 	
