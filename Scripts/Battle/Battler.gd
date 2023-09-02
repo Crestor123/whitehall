@@ -21,6 +21,8 @@ var partyMember = false
 var movePosition : Vector3
 var moveRange : float = 0
 var attackRange : float = 0
+var targetsInRange = []
+var currentTarget = null
 
 signal turnFinished
 signal dead
@@ -166,7 +168,8 @@ func setActive():
 	#Create an attack zone that shows wher the battler can reach
 	print(moveRange)
 	createZone(moveRange)
-	createZone(moveRange + attackRange, Color.RED)
+	var attackZone = await createZone(moveRange + attackRange, Color.RED)
+	targetsInRange = attackZone.collisions
 	movePosition = position
 	#For party members, need to wait for the player's selection of move
 	#For enemies, need to select one of their moves
@@ -177,13 +180,16 @@ func setActive():
 		add_child(timer)
 		timer.start()
 		await timer.timeout
+		
+		currentTarget = chooseTarget(targetList.get_children())
+		#Move towards the target until it is in range
 		if abilities.get_child_count() == 1:
-			useAbility(abilities.get_child(0))
+			useAbility(abilities.get_child(0), currentTarget)
 	if partyMember == true:
 		await turnFinished
 	stepBuff()
 	movementNode.get_child(0).queue_free()
-	movementNode.get_child(0).queue_free()
+	movementNode.get_child(1).queue_free()
 	pass
 
 func turnTest():
@@ -196,14 +202,15 @@ func createZone(radius, color = Color.BLUE):
 	newZone.transform = self.transform
 	newZone.position.y -= 1
 	#Set the zone's radius to be proportional to the battler's dexterity
-	newZone.initialize(radius, color)
+	await newZone.initialize(radius, color)
+	return newZone
 	pass
 
-func chooseTarget():
+func chooseTarget(list):
 	var target : Battler
-	for child in targetList.get_children():
-		if child != self and child.partyMember == true:
-			target = child
+	for item in list:
+		if item != self and item.partyMember == true:
+			target = item
 	return target
 	pass
 
@@ -217,7 +224,7 @@ func useAbility(ability, target = null):
 		pass
 	if ability.type == "attack":
 		if target == null:
-			chooseTarget().takeDamage(damage, ability.element)
+			chooseTarget(targetsInRange).takeDamage(damage, ability.element)
 		else:
 			target.takeDamage(damage, ability.element)
 	

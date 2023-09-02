@@ -7,6 +7,7 @@ signal input
 @onready var abilityContainer = $MarginContainer/HBoxContainer/VBoxContainer
 @onready var targetMarker = $Sprite3D
 
+var currentPartyMember = null
 var enemyList = []
 var partyList = []
 var target = null
@@ -36,13 +37,16 @@ func _input(event):
 	if event.is_action_pressed("ui_right"):
 		targetIndex = targetIndex - 1
 		if targetIndex < 0:
-			targetIndex = enemyList.size() - 1
+			#targetIndex = enemyList.size() - 1
+			targetIndex = currentPartyMember.targetsInRange.size() - 1
 	if event.is_action_pressed("ui_left"):
 		targetIndex = targetIndex + 1
-		if targetIndex > enemyList.size() - 1:
+		#if targetIndex > enemyList.size() - 1:
+		if targetIndex > currentPartyMember.targetsInRange.size() - 1:
 			targetIndex = 0
 	if previousIndex != targetIndex:
-		setTarget(enemyList[targetIndex])
+		#setTarget(enemyList[targetIndex])
+		setTarget(currentPartyMember.targetsInRange[targetIndex])
 
 func setTarget(battler : Battler):
 	target = battler
@@ -52,9 +56,11 @@ func setTarget(battler : Battler):
 	pass
 
 func showUI(partyMember):
+	currentPartyMember = partyMember
+	
 	#Error checking to make sure that the target is initialized properly
 	if !is_instance_valid(target) or target.stats.health <= 0:
-		for enemy in enemyList:
+		for enemy in partyMember.targetsInRange:
 			if is_instance_valid(enemy) and enemy.stats.health > 0:
 				setTarget(enemy)
 				break

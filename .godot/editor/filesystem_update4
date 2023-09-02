@@ -1,6 +1,7 @@
 res://default_env.tres
 res://Scenes/Main.tscn
 res://Resources/PartyMembers/Test.tres
+res://Scripts/Battle/Battler.gd
 res://Scenes/Test.tscn
 res://Scenes/Actors/Entity.tscn
 res://Scenes/Battle.tscn
@@ -10,4 +11,4 @@ res://Scenes/Menus/SpellMenu.tscn
 res://Scenes/Menus/SpellComponent.tscn
 res://Scenes/SceneChanger.tscn
 res://Scenes/Objects/Zone3D.tscn
-res://Scripts/Battle/Battler.gd
+res://Scripts/Battle/BattleUILayer.gd
