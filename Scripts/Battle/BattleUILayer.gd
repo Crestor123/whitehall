@@ -65,6 +65,9 @@ func showUI(partyMember):
 				setTarget(enemy)
 				break
 				
+	if partyMember.targetsInRange.size() == 0:
+		setTarget(partyMember)
+				
 	set_process(true)
 	for child in partyMember.abilities.get_children():
 		var newButton = abilityButton.instantiate()

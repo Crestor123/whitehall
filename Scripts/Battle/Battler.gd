@@ -24,6 +24,11 @@ var attackRange : float = 0
 var targetsInRange = []
 var currentTarget = null
 
+var moving = false
+var inRange = false
+
+signal active
+signal finishedMoving
 signal turnFinished
 signal dead
 
@@ -110,6 +115,31 @@ func _physics_process(delta):
 		set_up_direction(Vector3.UP)
 		move_and_slide()
 	
+	if isActive == true and partyMember == false:
+		if moving == false: return
+		var direction = Vector3.ZERO
+		direction = position.direction_to(currentTarget.position)
+		direction = direction.normalized()
+		
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
+		
+		var newPosition = position + Vector3(velocity.x * delta, 0, velocity.z * delta)
+		if position.distance_to(currentTarget.position) <= attackRange:
+			velocity = Vector3.ZERO
+			moving = false
+			inRange = true
+			finishedMoving.emit()
+			return
+		if newPosition.distance_to(movePosition) >= moveRange:
+			velocity = Vector3.ZERO
+			moving = false
+			finishedMoving.emit()
+		
+		set_velocity(velocity)
+		set_up_direction(Vector3.UP)
+		move_and_slide()
+	
 	for index in range(get_slide_collision_count()):
 		var collision = get_slide_collision(index)
 		var collider = collision.get_collider()
@@ -159,6 +189,8 @@ func set_sprite(newSprite : Texture2D):
 
 func setActive():
 	print(self, "active")
+	inRange = false
+	
 	if stats.health <= 0:
 		emit_signal("turnFinished")
 	isActive = true
@@ -171,6 +203,8 @@ func setActive():
 	var attackZone = await createZone(moveRange + attackRange, Color.RED)
 	targetsInRange = attackZone.collisions
 	movePosition = position
+	
+	emit_signal("active")
 	#For party members, need to wait for the player's selection of move
 	#For enemies, need to select one of their moves
 	if partyMember == false:
@@ -182,9 +216,18 @@ func setActive():
 		await timer.timeout
 		
 		currentTarget = chooseTarget(targetList.get_children())
-		#Move towards the target until it is in range
-		if abilities.get_child_count() == 1:
-			useAbility(abilities.get_child(0), currentTarget)
+		#Move towards the target until it is in range, then end turn
+		if position.distance_to(currentTarget.position) > moveRange:
+			moving = true
+		await finishedMoving
+		
+		if inRange:
+			if abilities.get_child_count() == 1:
+				useAbility(abilities.get_child(0), currentTarget)
+		else:
+			emit_signal("turnFinished")
+			isActive = false
+				
 	if partyMember == true:
 		await turnFinished
 	stepBuff()

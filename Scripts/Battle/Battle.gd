@@ -54,6 +54,7 @@ func initialize(party, enemies):
 func startTurn():
 	#Sets the current battler to be active, and waits for the battler to finish the turn
 	turnOrder.activeBattler.setActive()
+	await get_tree().create_timer(0.2).timeout
 	
 	#If the battler is a party member, set up the UI for that battler
 	if turnOrder.activeBattler.partyMember == true:
