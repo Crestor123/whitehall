@@ -11,5 +11,3 @@ res://Scenes/Menus/SpellMenu.tscn
 res://Scenes/Menus/SpellComponent.tscn
 res://Scenes/SceneChanger.tscn
 res://Scenes/Objects/Zone3D.tscn
-res://Scripts/Battle/BattleUILayer.gd
-res://Scripts/Battle/Battle.gd

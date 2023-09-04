@@ -83,33 +83,54 @@ func _physics_process(delta):
 	if isActive == true && partyMember == true:
 		var direction = Vector3.ZERO
 	
-		if Input.is_action_pressed("move_right"):
-			direction.x += 1
-		if Input.is_action_pressed("move_left"):
-			direction.x -= 1
-		if Input.is_action_pressed("move_down"):
-			direction.z += 1
-		if Input.is_action_pressed("move_up"):
-			direction.z -= 1
+		if moving == false:
+			if Input.is_action_pressed("move_right"):
+				direction.x += 1
+			if Input.is_action_pressed("move_left"):
+				direction.x -= 1
+			if Input.is_action_pressed("move_down"):
+				direction.z += 1
+			if Input.is_action_pressed("move_up"):
+				direction.z -= 1
 		
-		if direction != Vector3.ZERO:
+			if direction != Vector3.ZERO:
+				direction = direction.normalized()
+	
+			velocity.x = direction.x * speed
+			velocity.z = direction.z * speed
+			#velocity.y -= fall_acceleration * delta
+	
+			#Check if the movment will put the battler outside of its movement radius
+			var newPosition = position + Vector3(velocity.x * delta, 0, 0)
+			var normal = -movePosition.direction_to(newPosition).normalized()
+			if newPosition.distance_to(movePosition) >= moveRange:
+				velocity += normal * (speed / 2)
+				velocity.x = 0
+			newPosition = position + Vector3(0, 0, velocity.z * delta)
+			normal = -movePosition.direction_to(newPosition).normalized()
+			if newPosition.distance_to(movePosition) >= moveRange:
+				velocity += normal * (speed / 2)
+				velocity.z = 0
+	
+		else:
+			direction = Vector3.ZERO
+			direction = position.direction_to(currentTarget.position)
 			direction = direction.normalized()
-	
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
-		#velocity.y -= fall_acceleration * delta
-	
-		#Check if the movment will put the battler outside of its movement radius
-		var newPosition = position + Vector3(velocity.x * delta, 0, 0)
-		var normal = -movePosition.direction_to(newPosition).normalized()
-		if newPosition.distance_to(movePosition) >= moveRange:
-			velocity += normal * (speed / 2)
-			velocity.x = 0
-		newPosition = position + Vector3(0, 0, velocity.z * delta)
-		normal = -movePosition.direction_to(newPosition).normalized()
-		if newPosition.distance_to(movePosition) >= moveRange:
-			velocity += normal * (speed / 2)
-			velocity.z = 0
+		
+			velocity.x = direction.x * speed
+			velocity.z = direction.z * speed
+			
+			var newPosition = position + Vector3(velocity.x * delta, 0, velocity.z * delta)
+			if position.distance_to(currentTarget.position) <= attackRange:
+				velocity = Vector3.ZERO
+				moving = false
+				inRange = true
+				finishedMoving.emit()
+				return
+			if newPosition.distance_to(movePosition) >= moveRange:
+				velocity = Vector3.ZERO
+				moving = false
+				finishedMoving.emit()
 	
 		set_velocity(velocity)
 		set_up_direction(Vector3.UP)
@@ -176,7 +197,7 @@ func initialize():
 		
 	moveRange = stats.dexterity * 3
 		#Temporary - set attack range
-	attackRange = 2
+	attackRange = 3
 		
 
 		
@@ -198,9 +219,10 @@ func setActive():
 		return
 	#Create a movement zone that the battler can move within
 	#Create an attack zone that shows wher the battler can reach
-	print(moveRange)
-	createZone(moveRange)
+	
 	var attackZone = await createZone(moveRange + attackRange, Color.RED)
+	createZone(moveRange)
+	
 	targetsInRange = attackZone.collisions
 	movePosition = position
 	
@@ -219,7 +241,8 @@ func setActive():
 		#Move towards the target until it is in range, then end turn
 		if position.distance_to(currentTarget.position) > moveRange:
 			moving = true
-		await finishedMoving
+			await finishedMoving
+		else: inRange = true
 		
 		if inRange:
 			if abilities.get_child_count() == 1:
@@ -266,10 +289,18 @@ func useAbility(ability, target = null):
 		addBuff(ability.attackName, ability.mainStat, damage, ability.element, ability.turns)
 		pass
 	if ability.type == "attack":
+		
 		if target == null:
-			chooseTarget(targetsInRange).takeDamage(damage, ability.element)
-		else:
-			target.takeDamage(damage, ability.element)
+			target = chooseTarget(targetsInRange)
+			#chooseTarget(targetsInRange).takeDamage(damage, ability.element)
+		#else:
+			#target.takeDamage(damage, ability.element)
+		#If the target is not within attack range, move until it is
+		if position.distance_to(target.position) > attackRange:
+			currentTarget = target
+			moving = true
+			await finishedMoving
+		target.takeDamage(damage, ability.element)
 	
 	if ability.additionalEffects.size() > 0:
 		for effect in ability.additionalEffects:
