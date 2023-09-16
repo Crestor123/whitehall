@@ -15,6 +15,7 @@ class_name Battler
 @onready var movementNode = get_parent().get_parent().get_node("MovementZone")
 @onready var healthBar = $HealthBar
 @onready var mesh = $Pivot/MeshInstance3D
+@onready var raycast = $RayCast3D
 
 var isActive = false
 var partyMember = false

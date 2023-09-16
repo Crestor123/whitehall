@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b16fb4m4uo86n"]
+[gd_scene load_steps=10 format=3 uid="uid://b16fb4m4uo86n"]
 
 [ext_resource type="Script" path="res://Scripts/Battle/Battle.gd" id="1"]
 [ext_resource type="Script" path="res://Scripts/Battle/TurnOrder.gd" id="2"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/Battle/BattleUILayer.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://cyi0f72np8byw" path="res://Scenes/Objects/AbilityButton.tscn" id="5"]
 [ext_resource type="Texture2D" uid="uid://djqjl7m0j70gf" path="res://Sprites/CursorSingle.png" id="6"]
+[ext_resource type="Script" path="res://Scripts/Battle/MovementZone.gd" id="7_5rau2"]
 
 [sub_resource type="BoxShape3D" id="1"]
 size = Vector3(30, 1, 30)
@@ -87,3 +88,7 @@ texture = ExtResource("6")
 transform = Transform3D(-0.557528, 0.830158, 6.87257e-08, -0.363188, -0.243914, 0.899222, 0.746496, 0.501342, 0.437492, 0, 27.9737, 22.1812)
 
 [node name="MovementZone" type="Node3D" parent="."]
+
+[node name="Movement" type="MeshInstance3D" parent="."]
+skeleton = NodePath("../MovementZone")
+script = ExtResource("7_5rau2")

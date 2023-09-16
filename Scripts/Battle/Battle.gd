@@ -6,6 +6,7 @@ extends Node3D
 
 @onready var turnOrder = $TurnOrder
 @onready var UI = $UILayer
+@onready var movementZone = $Movement
 
 var partyList = []
 var enemyList = []
@@ -53,7 +54,9 @@ func initialize(party, enemies):
 
 func startTurn():
 	#Sets the current battler to be active, and waits for the battler to finish the turn
+	await get_tree().create_timer(0.5).timeout
 	turnOrder.activeBattler.setActive()
+	movementZone.generateZone(turnOrder.activeBattler, enemyList[0])
 	await get_tree().create_timer(0.2).timeout
 	
 	#If the battler is a party member, set up the UI for that battler
