@@ -7,6 +7,7 @@ extends Node3D
 @onready var turnOrder = $TurnOrder
 @onready var UI = $UILayer
 @onready var movementZone = $Movement
+@onready var camera = $Camera3D
 
 var partyList = []
 var enemyList = []

@@ -270,6 +270,7 @@ func createZone(radius, color = Color.BLUE):
 	newZone.position.y -= 1
 	#Set the zone's radius to be proportional to the battler's dexterity
 	await newZone.initialize(radius, color)
+	newZone.visible = false
 	return newZone
 	pass
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b16fb4m4uo86n"]
+[gd_scene load_steps=12 format=3 uid="uid://b16fb4m4uo86n"]
 
 [ext_resource type="Script" path="res://Scripts/Battle/Battle.gd" id="1"]
 [ext_resource type="Script" path="res://Scripts/Battle/TurnOrder.gd" id="2"]
@@ -11,15 +11,21 @@
 [sub_resource type="BoxShape3D" id="1"]
 size = Vector3(30, 1, 30)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bgkv1"]
+albedo_color = Color(0.0392157, 0.0392157, 0.0392157, 1)
+
 [sub_resource type="BoxMesh" id="2"]
+material = SubResource("StandardMaterial3D_bgkv1")
 size = Vector3(60, 2, 60)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_tkiaf"]
 
 [node name="Battle" type="Node3D"]
 script = ExtResource("1")
 battlerScene = ExtResource("3")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.970275, -0.106756, 0.217187, 0, 0.897443, 0.44113, -0.242007, -0.428017, 0.870766, 6.93842, 13.4725, 24.9055)
+transform = Transform3D(1, 0, 0, 0, 0.77384, 0.633381, 0, -0.633381, 0.77384, 5.28137, 17.5223, 27.812)
 
 [node name="TurnOrder" type="Node" parent="."]
 script = ExtResource("2")
@@ -90,5 +96,6 @@ transform = Transform3D(-0.557528, 0.830158, 6.87257e-08, -0.363188, -0.243914, 
 [node name="MovementZone" type="Node3D" parent="."]
 
 [node name="Movement" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_tkiaf")
 skeleton = NodePath("../MovementZone")
 script = ExtResource("7_5rau2")
