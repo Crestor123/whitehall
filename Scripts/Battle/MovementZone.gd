@@ -11,7 +11,7 @@ func generateZone(battler, enemy):
 	var raycast = battler.raycast
 
 	#collisions contains a dictionary of the collided objects, the point, and angle in degrees
-	var vertices = raycast.rotate_ray()
+	var vertices = raycast.rotate_ray(battler.moveRange)
 	
 	#Generate the array mesh based on the collision dictionary
 	#var vertices = PackedVector3Array()
@@ -40,10 +40,10 @@ func generateZone(battler, enemy):
 	
 	for i in range(vertices.size(), 0, -1):
 		index.push_back(0)
-		index.push_back(i - 1)
-		if i == 2:
+		index.push_back(i)
+		if i == 1:
 			index.push_back(vertices.size() - 1)
-		else: index.push_back(i - 2)
+		else: index.push_back(i - 1)
 
 	#index.reverse()
 	#vertices.reverse()

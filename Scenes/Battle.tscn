@@ -105,4 +105,4 @@ script = ExtResource("7_5rau2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Wall" parent="Obstacles" instance=ExtResource("8_1cg0y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.80061, 0, 7.95556)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0395722, 0, 17.8878)

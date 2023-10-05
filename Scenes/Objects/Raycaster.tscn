@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Objects/Raycaster.gd" id="1_773ww"]
+
+[node name="RayCast3D" type="RayCast3D"]
+transform = Transform3D(0.559193, 0, 0.829038, 0, 1, 0, -0.829038, 0, 0.559193, 0, -1, 0)
+target_position = Vector3(0, 0, 3)
+collision_mask = 2
+collide_with_areas = true
+script = ExtResource("1_773ww")
