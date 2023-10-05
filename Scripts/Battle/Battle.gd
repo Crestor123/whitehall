@@ -8,6 +8,7 @@ extends Node3D
 @onready var UI = $UILayer
 @onready var movementZone = $Movement
 @onready var camera = $Camera3D
+@onready var obstacles = $Obstacles
 
 var partyList = []
 var enemyList = []

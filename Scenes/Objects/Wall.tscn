@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dmto5v442sgap"]
+
+[ext_resource type="Script" path="res://Scripts/Battle/Wall.gd" id="1_gpngm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_xfoun"]
+resource_local_to_scene = true
+size = Vector3(5, 3, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_va7sc"]
+resource_local_to_scene = true
+size = Vector3(5, 10, 1)
+
+[node name="Wall" type="StaticBody3D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_gpngm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_xfoun")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_va7sc")

@@ -13,6 +13,7 @@ class_name Battler
 
 @onready var targetList = get_parent()
 @onready var movementNode = get_parent().get_parent().get_node("MovementZone")
+@onready var obstacles = get_parent().get_parent().get_node("Obstacles")
 @onready var healthBar = $HealthBar
 @onready var mesh = $Pivot/MeshInstance3D
 @onready var raycast = $RayCast3D
